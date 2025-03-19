@@ -8,6 +8,7 @@ namespace TrainManagement.DAL.MappingProfile
         public DataAccessMapingProfile()
         {
             CreateMap<Entities.User, User>().ReverseMap();
+            CreateMap<Entities.TrainComponent, TrainComponent>().ReverseMap();
         }
     }
 }

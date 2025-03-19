@@ -13,6 +13,8 @@ namespace TrainManagement.DAL.Context
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<TrainComponent> TrainComponents { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
