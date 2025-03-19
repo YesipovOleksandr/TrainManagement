@@ -1,6 +1,7 @@
 ﻿using TrainManagement.Common.Enums;
 using TrainManagement.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 
 namespace TrainManagement.DAL.Context
@@ -35,6 +36,14 @@ namespace TrainManagement.DAL.Context
                 Password = "Zf4+0X+GmroJiOFR/PBEjfIoXZurBtcrPHI0i9YxNJv9yfYkNujc+lXVhNLlRWDw",
                 Role = UserRole.Admin
             });
+
+            builder.Entity<TrainComponent>()
+                   .HasIndex(tc => tc.Name)
+                   .IsUnique();
+
+            builder.Entity<TrainComponent>()
+                   .HasIndex(tc => tc.UniqueNumber)
+                   .IsUnique();
 
 
             base.OnModelCreating(builder);

@@ -17,6 +17,8 @@ namespace TrainManagement.Dependencies.DependencyModules
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddTransient<IHasher, Hasher>();
+            services.AddScoped<ITrainComponentRepository, TrainComponentRepository>();
+            services.AddScoped<ITrainComponentService, TrainComponentService>();   
         }
     }
 }

@@ -9,6 +9,7 @@ namespace TrainManagement.API.MappingProfile
         {
             CreateMap<LoginViewModel, Common.Models.User>().ReverseMap();
             CreateMap<AuthViewModel, Common.Models.User>().ReverseMap();
+            CreateMap<CreateTrainComponentViewModel, Common.Models.TrainComponent>().ReverseMap();
         }
     }
 }
