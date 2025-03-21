@@ -17,9 +17,23 @@ namespace TrainManagement.DAL.Repository
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TrainComponent>> GetAll()
+        public async Task<TrainComponentList> GetAll(int page, int number, string? search = null)
         {
-            return _mapper.Map<List<TrainComponent>>(await _context.TrainComponents.ToListAsync());
+            var query = _context.TrainComponents.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(c => c.Name.Contains(search) || c.UniqueNumber.Contains(search));
+            }
+
+            int totalCount = await query.CountAsync();
+
+            var items = await query
+                .Skip((page - 1) * number)
+                .Take(number)
+                .ToListAsync();
+
+            return new TrainComponentList(_mapper.Map<List<TrainComponent>>(items), totalCount);
         }
 
         public async Task<TrainComponent> GetById(long id)
@@ -66,5 +80,12 @@ namespace TrainManagement.DAL.Repository
                 throw new InvalidOperationException("Quantity assignment is not allowed.");
             }
         }
+
+        public async Task<bool> IsUniqueNumberExists(string uniqueNumber)
+        {
+            return await _context.TrainComponents
+                                 .AnyAsync(tc => tc.UniqueNumber == uniqueNumber);
+        }
+
     }
 }

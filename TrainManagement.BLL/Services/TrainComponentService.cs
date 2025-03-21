@@ -23,9 +23,9 @@ namespace TrainManagement.BLL.Services
             await _trainComponentRepository.DeleteById(id);
         }
 
-        public async Task<IEnumerable<TrainComponent>> GetAll()
+        public async Task<TrainComponentList> GetAll(int page, int number, string? search = null)
         {
-            return await _trainComponentRepository.GetAll();
+            return await _trainComponentRepository.GetAll(page,number,search);
         }
 
         public async Task<TrainComponent> GetById(long id)
@@ -41,6 +41,11 @@ namespace TrainManagement.BLL.Services
         public async Task UpdateQuantity(long id, int quantity)
         {
              await _trainComponentRepository.UpdateQuantity(id, quantity);
+        }
+
+        public async Task<bool> IsUniqueNumberExists(string uniqueNumber)
+        {
+            return await _trainComponentRepository.IsUniqueNumberExists(uniqueNumber);
         }
     }
 }
