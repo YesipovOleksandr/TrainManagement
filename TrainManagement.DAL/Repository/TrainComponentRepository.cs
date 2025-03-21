@@ -59,7 +59,7 @@ namespace TrainManagement.DAL.Repository
 
         public async Task DeleteById(long id)
         {
-            var model = await _context.TrainComponents.FindAsync(id);
+            var model = await _context.TrainComponents.FirstOrDefaultAsync(x => x.Id == id);
             if (model != null)
             {
                 _context.TrainComponents.Remove(model);

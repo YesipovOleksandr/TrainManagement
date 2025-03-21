@@ -77,36 +77,17 @@ namespace TrainManagement.API.Controllers
 
             var createdComponent = await _trainComponentService.Create(_mapper.Map<TrainComponent>(model));
 
-            foreach (var key in _cacheKeys)
-            {
-                _memoryCache.Remove(key);
-            }
-
-            _cacheKeys.Clear();
+            ClearCache();
 
             return CreatedAtAction("GetTrainComponent", new { id = createdComponent.Id }, createdComponent);
         }
 
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTrainComponent(long id, int quantity)
-        {
-            try
-            {
-                await _trainComponentService.UpdateQuantity(id, quantity);
-            }
-            catch (ArgumentException)
-            {
-                return BadRequest("Component ID mismatch.");
-            }
-
-            return NoContent();
-        }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTrainComponent(long id)
         {
-            //await _trainComponentService.DeleteById(id);
+            await _trainComponentService.DeleteById(id);
+            ClearCache();
             return NoContent();
         }
 
@@ -116,13 +97,28 @@ namespace TrainManagement.API.Controllers
             try
             {
                 await _trainComponentService.UpdateQuantity(id, quantity);
+                ClearCache();
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-                return BadRequest("Quantity assignment is not allowed.");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while processing the request.", details = ex.Message });
             }
 
             return NoContent();
+        }
+
+        private void ClearCache()
+        {
+            foreach (var key in _cacheKeys)
+            {
+                _memoryCache.Remove(key);
+            }
+
+            _cacheKeys.Clear();
         }
     }
 }

@@ -40,7 +40,11 @@ namespace TrainManagement.BLL.Services
 
         public async Task UpdateQuantity(long id, int quantity)
         {
-             await _trainComponentRepository.UpdateQuantity(id, quantity);
+            if (quantity < 0)
+            {
+                throw new InvalidOperationException("Quantity cannot be negative.");
+            }
+            await _trainComponentRepository.UpdateQuantity(id, quantity);
         }
 
         public async Task<bool> IsUniqueNumberExists(string uniqueNumber)
